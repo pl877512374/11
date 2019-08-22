@@ -1,5 +1,11 @@
 #include "PCLFunc.h"
 using namespace std;
+std::string CloudId;
+int EveryLMFlag[40];
+QVTKWidget *qvtk = NULL;
+pcl::PointCloud<pcl::PointXYZ>::Ptr cloud;
+pcl::visualization::PCLVisualizer::Ptr viewer = NULL;
+bool FlagPointDisplay = true;  //true是点  false是线
 double LastLaserPose[4] = { -1, 0, 0, 0 }; //上一次自身位置信息 
 vector<int> SetLandMark_ID;   //记录设置的靶标的ID
 boost::mutex m_ViewMutex;

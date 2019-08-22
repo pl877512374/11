@@ -16,8 +16,8 @@ int g_n32CircleNo = 0;//圈号变量（变化的圈号值）
 int SZ_Serial = 0;//每一圈的每一包序列号
 bool b_readfinish = false;//一帧数据有没有读到最后一包的标志
 int g_n32NetRecvID = 0;//每一帧数据的ID
-int *countval = NULL;//放置统计值
-int sum_framenum = 0, wrong_framenum = 0;//总帧数、错误帧数 要在别的类中使用，所以不要放到头文件中去
+vector<int> countval;//放置统计值
+int sum_framenum = 0, wrong_framenum = 0;//ki.h中已将改变了进行了声明为外部变量，词cpp处进行定义
 char g_cNetRecvBuf[NET_BUF_NUM][NET_BUFCOL_NUM];
 float g_n64ArrayZhiX[7200] = { 0 };
 float g_n64ArrayZhiY[7200] = { 0 };
@@ -133,7 +133,7 @@ void workthread::run()
 		{
 			if (f_tcpNetConn)//TCP网络已连接
 			{
-				if (TCPRecSocket->waitForReadyRead(100))
+				if (TCPRecSocket->waitForReadyRead(10))
 				{
 					arr = TCPRecSocket->readAll();
 					nRecvSize = arr.size();
@@ -247,7 +247,7 @@ void workthread::OnNetRecv(char *pDataBuf, int nDataBufSize)
 {
 	if (nDataBufSize > 0)
 	{
-		if (pDfunc->checkXor(pDataBuf, nDataBufSize))
+		if (true)//pDfunc->checkXor(pDataBuf, nDataBufSize)
 		{
 			memcpy(g_cNetRecvBuf[g_n32NetRecvID], pDataBuf, nDataBufSize);
 			switch ((unsigned char)g_cNetRecvBuf[g_n32NetRecvID][22])
@@ -365,10 +365,6 @@ void workthread::OnNetRecv(char *pDataBuf, int nDataBufSize)
 						 }
 						 if (g_n32CircleNo != CirclNo)
 						 {
-							 if (count_framenum == 0)
-							 {
-								 countval = new int[n_sigcountpack];
-							 }
 							 int RightPackNum, BufLength;
 							 float AngRatio;
 							 if (RatioMark == 0)
@@ -397,7 +393,7 @@ void workthread::OnNetRecv(char *pDataBuf, int nDataBufSize)
 									 nDataJi = ((g_sNetData.m_pcData[m] & 0xFF) << 8) + (BYTE)g_sNetData.m_pcData[m + 1];//(BYTE)一定要加，不加就会出现负值
 									 if (m == n_sigcountpoint * 2 && count_framenum<n_sigcountpack)
 									 {
-										 countval[count_framenum] = nDataJi;
+										 countval.push_back(nDataJi);
 									 }
 									 if (nDataJi > g_n32MaxDis)         //最大测距值
 										 nDataJi = g_n32MaxDis;
@@ -420,11 +416,7 @@ void workthread::OnNetRecv(char *pDataBuf, int nDataBufSize)
 									 if (abs(max_val) < g_n32MaxDis && abs(min_val) < g_n32MaxDis && abs(avg_val) < g_n32MaxDis)
 										 emit CountDataView_sig(max_val, min_val, avg_val);
 									 count_framenum = 0;
-									 if (countval)
-									 {
-										 delete[]countval;
-										 countval = NULL;
-									 }
+									 countval.clear();
 								 }
 								 if (RatioMark == 0)
 								 {
@@ -596,25 +588,24 @@ void workthread::CountDataView_slot(int max, int min, int avg)
 #pragma endregion
 
 #pragma region 求最大、最小、平均值
-void workthread::getMaxOrMin(int *arr, int count,int *rval)
+void workthread::getMaxOrMin(vector<int> arr, int count,int *rval)
 {
-	int val[3] = { 0 };
-	val[0] = arr[0];
-	val[1] = arr[0];
+	rval[0] = arr[0];
+	rval[1] = arr[0];
 	int sum = arr[0];
 	for (int i = 1; i < count; i++)
 	{
-		if (val[0]<arr[i])
+		if (rval[0]<arr[i])
 		{
-			val[0] = arr[i];
+			rval[0] = arr[i];
 		}
-		if (val[1]>arr[i])
+		if (rval[1]>arr[i])
 		{
-			val[1] = arr[i];
+			rval[1] = arr[i];
 		}
 		sum += arr[i];
 	}
-	val[2] = (int)(sum / count);
+	rval[2] = (int)(sum / count);
 }
 #pragma endregion
 

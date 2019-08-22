@@ -4,6 +4,8 @@
 #include "ki.h"
 #include "PCLFunc.h"
 #include "datadealfunc.h"
+#include <vector>
+using namespace std;
 #define PI  3.14159265358979323846
 class workthread:public QThread
 {
@@ -20,7 +22,7 @@ private:
 	QByteArray heart_zl;
 	float wrong_prop;//错误率
 	int k_protocal;//协议类型 0:TCP 1:UDP
-	void getMaxOrMin(int *arr, int count,int *rval);
+	void getMaxOrMin(vector<int> arr, int count,int *rval);
 signals:
 	void Draw_sig(int);
 	void CountDataView_sig(int,int,int);

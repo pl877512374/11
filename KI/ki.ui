@@ -1169,6 +1169,38 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>txt_sigcountpack</sender>
+   <signal>textChanged(QString)</signal>
+   <receiver>KIClass</receiver>
+   <slot>CountPackChanged()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>349</x>
+     <y>498</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>424</x>
+     <y>397</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>txt_countpoint</sender>
+   <signal>textChanged(QString)</signal>
+   <receiver>KIClass</receiver>
+   <slot>CountPointChanged()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>334</x>
+     <y>530</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>422</x>
+     <y>340</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>MoveZUP()</slot>

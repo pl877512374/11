@@ -427,6 +427,8 @@ public:
         QObject::connect(btn_netsetting, SIGNAL(clicked()), KIClass, SLOT(NetParaSettingClick()));
         QObject::connect(btn_baseparaquery, SIGNAL(clicked()), KIClass, SLOT(BaseParaQueryClick()));
         QObject::connect(btn_baseparasetting, SIGNAL(clicked()), KIClass, SLOT(BaseParaSetClick()));
+        QObject::connect(txt_sigcountpack, SIGNAL(textChanged(QString)), KIClass, SLOT(CountPackChanged()));
+        QObject::connect(txt_countpoint, SIGNAL(textChanged(QString)), KIClass, SLOT(CountPointChanged()));
 
         QMetaObject::connectSlotsByName(KIClass);
     } // setupUi

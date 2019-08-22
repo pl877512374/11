@@ -8,8 +8,10 @@
 #include <QStringList>
 #include "workthread.h"
 using namespace std;
-extern int sum_framenum;
-extern int wrong_framenum;
+DataDealFunc *pDatafunc=NULL;
+int  m_nTimerIp=0;
+PCLFunc *pclfunc = NULL;
+QString str_hintinfo="";//提示信息
 bool f_conscan = true;//是否连续扫描标志
 QByteArray zl_Getnum = NULL, zl_LMDetect = NULL;//要数指令、靶标探测指令
 QByteArray zl_Brocast = NULL;//广播指令
@@ -20,7 +22,6 @@ bool f_NetConState_TCP = false;//TCP网络连接状态标志位
 bool f_ConOrDiscon = true;
 bool f_ConOrDiscon_UDP = true;
 QUdpSocket * receiver = NULL;
-extern int *countval;
 int n_sigcountpack = 0;//单次统计包数
 int n_sigcountpoint = 0;//统计点序号，要在Workthread类中用到，不能在头文件中定义
 QString host;
@@ -480,7 +481,6 @@ void KI::closeEvent(QCloseEvent *event)
 		QMessageBox::Yes, QMessageBox::No)
 		== QMessageBox::Yes)
 	{
-		killTimer(m_nTimerIp);
 		if (workThread != NULL)
 		{
 			/*workThread->terminate();*/
@@ -651,12 +651,6 @@ void KI::Countdataview(int max, int min, int avg)
 void KI::CountPackChanged()
 {
 	n_sigcountpack = ui.txt_sigcountpack->text().toInt();
-	if (countval)
-	{
-		delete[]countval;
-		countval = NULL;
-	}
-	countval = new int[n_sigcountpack];
 }
 
 void KI::CountPointChanged()

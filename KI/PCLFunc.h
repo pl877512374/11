@@ -39,16 +39,10 @@ public:
 	void AddLandMarkArray(float *LMData, int LMCount);
 	void DeleteOneSetLMDisplay(int LMID);
 	void AddOneSetLMDisplay(int x, int y, int LMID);
-	pcl::PointCloud<pcl::PointXYZ>::Ptr cloud;
-	pcl::visualization::PCLVisualizer::Ptr viewer=NULL;
-	bool FlagPointDisplay = true;  //true是点  false是线
 	void PointOrPolyline(bool f_PointOrLine);
 	void DeleteCurrLM();
-	QVTKWidget *qvtk = NULL;
 private:
 	//点云数据存储
-	std::string CloudId;
-	int EveryLMFlag[40];
 	int xQvtk,yQvtk;
 };
 

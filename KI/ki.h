@@ -16,6 +16,8 @@
 #include <QDesktopWidget>
 #define LOCAL_PORT 7000
 #define DEST_PORT 6060
+extern int sum_framenum;
+extern int wrong_framenum;
 class KI : public QMainWindow
 {
 	Q_OBJECT
@@ -31,13 +33,8 @@ public:
 	void TcpConnInfo(bool b_conn);//TCP连接信息显示
 private:
 	Ui::KIClass ui;
-	DataDealFunc *pDatafunc;
 	void timerEvent(QTimerEvent* event);
 	void LayoutDesign();
-	int  m_nTimerIp;
-	int get_cur_row;//靶标获取
-	PCLFunc *pclfunc;
-	QString str_hintinfo;//提示信息
 	void controlset(bool f_set);//控制网络部分控件
 	//创建连接槽
 private slots:
