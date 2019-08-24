@@ -105,7 +105,7 @@ void workthread::run()
 		connect(this, SIGNAL(sig_NetParaview(QString, QString, QString, QString, QString)), this, SLOT(slot_NetParaview(QString, QString, QString, QString, QString)));
 		connect(this, SIGNAL(sig_BaseParaView(int, int)), this, SLOT(slot_BaseParaView(int, int)));
 		TCPRecSocket->connectToHost(host, port, QTcpSocket::ReadWrite); //连接主机
-		if (TCPRecSocket->waitForConnected(100))//不能少，连接需要一定的时间
+		if (TCPRecSocket->waitForConnected(100))
 		{
 			f_tcpNetConn = true;
 		}
@@ -113,7 +113,6 @@ void workthread::run()
 		{
 			f_tcpNetConn = false;
 		}
-		//Sleep(500);
 		emit TcpConnInfo_sig(f_tcpNetConn);
 	}
 	int nRecvSize = 0;
@@ -133,7 +132,7 @@ void workthread::run()
 		{
 			if (f_tcpNetConn)//TCP网络已连接
 			{
-				if (TCPRecSocket->waitForReadyRead(10))
+				if (TCPRecSocket->waitForReadyRead(100))
 				{
 					arr = TCPRecSocket->readAll();
 					nRecvSize = arr.size();
@@ -247,7 +246,7 @@ void workthread::OnNetRecv(char *pDataBuf, int nDataBufSize)
 {
 	if (nDataBufSize > 0)
 	{
-		if (true)//pDfunc->checkXor(pDataBuf, nDataBufSize)
+		if (pDfunc->checkXor(pDataBuf, nDataBufSize))
 		{
 			memcpy(g_cNetRecvBuf[g_n32NetRecvID], pDataBuf, nDataBufSize);
 			switch ((unsigned char)g_cNetRecvBuf[g_n32NetRecvID][22])
@@ -677,7 +676,7 @@ void workthread::connect_false(QAbstractSocket::SocketError a)
 {
 	qDebug() << TCPRecSocket->errorString();
 	TCPRecSocket->close();
-	//f_tcpNetConn = false;
+	f_tcpNetConn = false;
 }
 #pragma endregion
 

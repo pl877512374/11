@@ -149,17 +149,20 @@ void KI::LayoutDesign()
 #pragma region 定时器发送要数指令
 void KI::timerEvent(QTimerEvent* event)
 {
-	if (k_Protocal == 1)//UDP
+	if (event->timerId() == m_nTimerIp)
 	{
-		QHostAddress address(host);
-		receiver->writeDatagram(zl_Getnum, zl_Getnum.length(), address, DEST_PORT);
-	}
-	//receiver->waitForBytesWritten(10);
-	else//TCP
-	{
-		workThread->Sendzhiling(zl_Getnum);
-		/*tcpSocket->write(zl_Getnum, zl_Getnum.length());*/
+		if (k_Protocal == 1)//UDP
+		{
+			QHostAddress address(host);
+			receiver->writeDatagram(zl_Getnum, zl_Getnum.length(), address, DEST_PORT);
+		}
+		//receiver->waitForBytesWritten(10);
+		else//TCP
+		{
+			workThread->Sendzhiling(zl_Getnum);
+			/*tcpSocket->write(zl_Getnum, zl_Getnum.length());*/
 
+		}
 	}
 }
 #pragma endregion
@@ -430,7 +433,7 @@ void KI::timerUpDate()
 		}
 		if (timer_Brocast)
 		{
-			delete[] timer_Brocast;
+			delete timer_Brocast;
 		}
 		ui.btn_BroadCast->setEnabled(true);
 	}
@@ -442,7 +445,7 @@ void KI::timerUpDate()
 		}
 		if (timer_Brocast)
 		{
-			delete[] timer_Brocast;
+			delete timer_Brocast;
 		}
 	}
 }
