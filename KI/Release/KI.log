@@ -1,6 +1,5 @@
-﻿生成启动时间为 2019/8/22 19:30:45。
+﻿生成启动时间为 2019/8/26 10:53:12。
      1>项目“E:\CodeLearn\QT Learn\712qt CloudPointView\KI Win32 PCL1.8TCP UDP\KI\KI.vcxproj”在节点 2 上(Rebuild 个目标)。
-     1>C:\Program Files (x86)\MSBuild\Microsoft.Cpp\v4.0\V120\Microsoft.CppClean.targets(76,5): warning : 文件“e:\codelearn\qt learn\712qt cloudpointview\ki win32 pcl1.8tcp udp\ki\release\vc120.pdb”正由另一进程使用，因此该进程无法访问此文件。
      1>C:\Program Files (x86)\MSBuild\Microsoft.Cpp\v4.0\V120\Microsoft.CppBuild.targets(381,5): warning MSB8028: The intermediate directory (Release\) contains files shared from another project (712C_Laser.vcxproj, KI.vcxproj).  This can lead to incorrect clean and rebuild behavior.
      1>CustomBuild:
          Moc'ing ki.h...
@@ -166,6 +165,7 @@
      1>D:\Program Files (x86)\PCL 1.8.0\include\pcl-1.8\pcl/visualization/interactor_style.h : warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
      1>D:\Program Files (x86)\PCL 1.8.0\include\pcl-1.8\pcl/visualization/pcl_visualizer.h(1588): warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
          正在生成代码...
+     1>e:\codelearn\qt learn\712qt cloudpointview\ki win32 pcl1.8tcp udp\ki\workthread.cpp(663): warning C4715: “workthread::DisconnectServer”: 不是所有的控件路径都返回值
          D:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /I.\GeneratedFiles /I. /ID:\Qt5.7.0Win32\5.7\msvc2013\include /I.\GeneratedFiles\Release /ID:\Qt5.7.0Win32\5.7\msvc2013\include\QtCore /ID:\Qt5.7.0Win32\5.7\msvc2013\include\QtGui /ID:\Qt5.7.0Win32\5.7\msvc2013\include\QtNetwork /ID:\Qt5.7.0Win32\5.7\msvc2013\include\QtWidgets /I"\include\pcl-1.8" /I"\3rdParty\Boost\include\boost-1_59" /I\3rdParty\Eigen\eigen3 /I\3rdParty\FLANN\include /I\3rdParty\OpenNI2\Include /I\3rdParty\Qhull\include /I"\3rdParty\VTK\include\vtk-7.0" /Zi /nologo /W1 /WX- /Od /Oy- /D UNICODE /D WIN32 /D WIN64 /D QT_DLL /D QT_NO_DEBUG /D NDEBUG /D QT_CORE_LIB /D QT_GUI_LIB /D QT_NETWORK_LIB /D QT_WIDGETS_LIB /D _SCL_SECURE_NO_WARNINGS /D _CRT_SECURE_NO_WARNINGS /Gm- /EHsc /MD /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Release\\" /Fd"Release\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt GeneratedFiles\qrc_ki.cpp
          qrc_ki.cpp
        ResourceCompile:
@@ -186,4 +186,4 @@
 
 生成成功。
 
-已用时间 00:02:15.22
+已用时间 00:02:14.09

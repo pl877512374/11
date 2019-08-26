@@ -79,6 +79,7 @@ workthread::~workthread()
 	disconnect(this, SIGNAL(TcpConnInfo_sig(bool)), this, SLOT(TcpConnInfo_slot(bool)));
 	disconnect(this, SIGNAL(sig_NetParaview(QString, QString, QString, QString, QString)), this, SLOT(slot_NetParaview(QString, QString, QString, QString, QString)));
 	disconnect(this, SIGNAL(sig_BaseParaView(int, int)), this, SLOT(slot_BaseParaView(int, int)));
+	disconnect(TCPRecSocket, SIGNAL(disconnected()), TCPRecSocket,SLOT(deleteLater()));
 	if (TCPRecSocket)
 	{
 		if (f_tcpNetConn)
@@ -105,15 +106,22 @@ void workthread::run()
 		connect(this, SIGNAL(sig_NetParaview(QString, QString, QString, QString, QString)), this, SLOT(slot_NetParaview(QString, QString, QString, QString, QString)));
 		connect(this, SIGNAL(sig_BaseParaView(int, int)), this, SLOT(slot_BaseParaView(int, int)));
 		TCPRecSocket->connectToHost(host, port, QTcpSocket::ReadWrite); //连接主机
-		if (TCPRecSocket->waitForConnected(100))
+		if (TCPRecSocket->waitForConnected(500))
 		{
 			f_tcpNetConn = true;
+			emit TcpConnInfo_sig(f_tcpNetConn);
 		}
 		else
 		{
+			if (TCPRecSocket)
+			{
+				delete TCPRecSocket;
+				TCPRecSocket = NULL;
+			}
 			f_tcpNetConn = false;
+			emit TcpConnInfo_sig(f_tcpNetConn);
+			return;
 		}
-		emit TcpConnInfo_sig(f_tcpNetConn);
 	}
 	int nRecvSize = 0;
 	while (!isInterruptionRequested())
@@ -136,10 +144,6 @@ void workthread::run()
 				{
 					arr = TCPRecSocket->readAll();
 					nRecvSize = arr.size();
-				}
-				else
-				{
-					qDebug() << TCPRecSocket->errorString();
 				}
 			}
 		}
@@ -622,9 +626,12 @@ void workthread::Sendzhiling(QByteArray send)
 			}
 		}
 	}
-	else if (k_Protocal==0)//TCP协议下才会有未连接提示
+	else 
 	{
-		emit InfoView_sig(QString::fromLocal8Bit("网络未连接！"));
+		if (k_Protocal == 0)//TCP协议下才会有未连接提示
+		{
+			emit InfoView_sig(QString::fromLocal8Bit("网络未连接！"));
+		}
 	}
 }
 #pragma endregion
@@ -633,40 +640,25 @@ void workthread::Sendzhiling(QByteArray send)
 bool workthread::DisconnectServer()
 {
 	if (f_tcpNetConn)
-	{
+	{  
 		if (TCPRecSocket != NULL)
 		{
+			connect(TCPRecSocket, SIGNAL(disconnected()), TCPRecSocket,
+				SLOT(deleteLater()));
+			//它表示当发送完成时就会断开连接，这时就会发出disconnected()信号，
+			//而最后调用deleteLater()函数保证在关闭连接后删除该套接字TCPRecSocket
 			TCPRecSocket->disconnectFromHost();
-			if (TCPRecSocket->waitForReadyRead(1000))
-			{
-				QByteArray a = TCPRecSocket->readAll();
-				if (a.length() == 0)
-				{
-					return true;
-					TCPRecSocket = NULL;
-					f_tcpNetConn = false;
-				}
-				else
-				{
-					return false;
-				}
-			}
-			else
-			{
-				return true;
-			}
-			delete TCPRecSocket;
-			TCPRecSocket = NULL;
 		}
 		else
 		{
+			emit InfoView_sig(QString::fromLocal8Bit("网络未连接！"));
 			return false;
 		}
 	}
 	else
 	{
-		return false;
 		emit InfoView_sig(QString::fromLocal8Bit("网络未连接！"));
+		return false;
 	}
 }
 #pragma endregion
@@ -674,9 +666,11 @@ bool workthread::DisconnectServer()
 #pragma region  TCP网络连接状态判断
 void workthread::connect_false(QAbstractSocket::SocketError a)
 {
-	qDebug() << TCPRecSocket->errorString();
-	TCPRecSocket->close();
-	f_tcpNetConn = false;
+	QString str = TCPRecSocket->errorString();
+	//qDebug() << TCPRecSocket->errorString();
+	emit InfoView_sig("socket err:"+str);
+	/*TCPRecSocket->close();
+	f_tcpNetConn = false;*/
 }
 #pragma endregion
 

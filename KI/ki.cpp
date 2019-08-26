@@ -67,82 +67,7 @@ void KI::resizeEvent(QResizeEvent *event)
 #pragma region 初始化splitter
 void KI::LayoutDesign()
 {
-	//QDesktopWidget* desktopWidget = QApplication::desktop();
-	////得到客户区矩形
-	//QRect clientRect = desktopWidget->availableGeometry();
-	//////得到应用程序矩形
-	////QRect clientRect = desktopWidget->screenGeometry();
-
-	//int nWidth = clientRect.width();
-	//int nHeight = clientRect.height();
-	//QSplitter *m_splitter = new QSplitter(Qt::Horizontal, this);
-
-	//QSplitter *splitter1 = new QSplitter(Qt::Vertical);
-	//splitter1->addWidget(ui.gbx_Left);
-	////splitter1->setMinimumWidth(nWidth*0.28);
-	//splitter1->setFixedWidth(nWidth*0.28);
-	//m_splitter->addWidget(splitter1);
-	//if (ui.cbx_Protocal->currentIndex() == 1)//UDP
-	//{
-	//	QSplitter *splitter2 = new QSplitter(Qt::Vertical);
-	//	splitter2->addWidget(ui.groupBox2);
-	//	splitter2->setMinimumWidth(nWidth*0.72);
-	//	splitter2->setMaximumWidth(nWidth*0.9);
-	//	splitter2->setMinimumHeight(nHeight*0.2);
-	//	splitter2->setMaximumHeight(nHeight*0.3);
-	//	m_splitter->addWidget(splitter2);
-
-
-	//	QSplitter *splitter3 = new QSplitter(Qt::Vertical, splitter2);
-	//	splitter3->addWidget(pclfunc->qvtk);
-	//	splitter3->setMinimumHeight(nHeight*0.85);
-	//	splitter3->setMaximumHeight(nHeight*0.95);
-
-	//	QSplitter *splitter4 = new QSplitter(Qt::Horizontal, splitter3);
-	//	splitter4->addWidget(ui.gbx_Para);
-	//	splitter4->setFixedHeight(0);
-	//	m_splitter->addWidget(splitter2);
-	//}
-	//else
-	//{
-	//	QSplitter *splitter2 = new QSplitter(Qt::Vertical);
-	//	splitter2->addWidget(ui.groupBox2);
-	//	splitter2->setMinimumWidth(nWidth*0.72);
-	//	splitter2->setMaximumWidth(nWidth*0.9);
-	//	splitter2->setMinimumHeight(nHeight*0.2);
-	//	splitter2->setMaximumHeight(nHeight*0.3);
-	//	m_splitter->addWidget(splitter2);
-
-	//	QSplitter *splitter3 = new QSplitter(Qt::Vertical, splitter2);
-	//	splitter3->addWidget(pclfunc->qvtk);
-	//	splitter3->setMinimumHeight(nHeight*0.85);
-	//	splitter3->setMaximumHeight(nHeight*0.95);
-
-	//	QSplitter *splitter4 = new QSplitter(Qt::Horizontal, splitter3);
-	//	splitter4->addWidget(ui.gbx_Para);
-	//	splitter4->setFixedHeight(nHeight*0.24);
-	//	m_splitter->addWidget(splitter2);
-	//}
-	//QGridLayout *mainly = new QGridLayout;
-	//mainly->addWidget(m_splitter);
-
-	//this->setLayout(mainly);
-	//this->setCentralWidget(m_splitter);
-
 	setmyStyle("qss/a.qss");
-	/*QString path = QCoreApplication::applicationDirPath();
-	path = path + "/a.qss";*/
-	//qDebug()<< path;
-	/*QString qss;
-	QFile qssFile(path);
-	qssFile.open(QFile::ReadOnly);
-	if (qssFile.isOpen())
-	{
-	qss = QLatin1String(qssFile.readAll());
-	qApp->setStyleSheet(qss);
-	qssFile.close();
-	}
-	*/
 }
 #pragma endregion
 
@@ -156,11 +81,9 @@ void KI::timerEvent(QTimerEvent* event)
 			QHostAddress address(host);
 			receiver->writeDatagram(zl_Getnum, zl_Getnum.length(), address, DEST_PORT);
 		}
-		//receiver->waitForBytesWritten(10);
 		else//TCP
 		{
 			workThread->Sendzhiling(zl_Getnum);
-			/*tcpSocket->write(zl_Getnum, zl_Getnum.length());*/
 
 		}
 	}
@@ -257,6 +180,7 @@ void KI::ConnTcpClick()
 				try
 				{
 					k_Protocal = 0;
+					ui.btn_Conn_tcp->setEnabled(false);
 					workThread = new workthread(this, pclfunc, NULL);
 					workThread->start();
 				}
@@ -512,8 +436,8 @@ void KI::ContinueScanClick()
 	if (f_conscan)
 	{
 		workThread->Sendzhiling(zl_LMDetect);//设置靶标探测模式
-		Sleep(30);
-		m_nTimerIp = startTimer(160);
+		Sleep(10);
+		m_nTimerIp = startTimer(120);
 		ui.btn_Continue->setText(QString::fromLocal8Bit("停止获取波形"));
 		f_conscan = false;
 		QString qstr = QString::fromLocal8Bit("获取连续波形！");
@@ -680,6 +604,7 @@ void KI::TcpConnInfo(bool b_conn)
 		str_hintinfo = QString::fromLocal8Bit("网络连接失败！");
 		Infoview(2, "", str_hintinfo);
 	}
+	ui.btn_Conn_tcp->setEnabled(true);
 }
 #pragma endregion
 
